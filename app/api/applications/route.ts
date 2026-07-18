@@ -11,7 +11,7 @@ export async function GET(req:Request) {
 
     try{
          await connectDb()
-    const app = await Application.find({userId : auth.userId}).populate('userID')
+    const app = await Application.find({userId : auth.userId}).populate('userId')
     if(!app){
         return Response.json({message:'application not found'},{status:404})
     }
