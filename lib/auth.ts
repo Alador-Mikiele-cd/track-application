@@ -1,7 +1,7 @@
 import { promises } from 'dns'
 import jwt from 'jsonwebtoken'
 
-export async function const(req:Request):Promise< { ok: true, userId: string } | { ok: false, message: string } >{
+export async function requireAuth(req:Request):Promise< { ok: true, userId: string } | { ok: false, message: string } >{
     const authHeader = req.headers.get('authorization')
     if(!authHeader){
         return {ok : false ,  message: 'Authorization token required'}
