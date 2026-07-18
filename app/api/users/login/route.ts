@@ -7,7 +7,7 @@ import connectDb from '@/lib/db'
 export async function POST(req:Request) {
     try{
         await connectDb()
-        const {name,email,password} = await req.json()
+        const {email,password} = await req.json()
 
         const userexists = await User.findOne({email})
         if(!userexists){
@@ -18,7 +18,7 @@ export async function POST(req:Request) {
         if(!compare){
            return Response.json({message:'user not found'},{status : 404})
         }
-        const token = jwt.sign({userid :userexists._id}, process.env.JWT as string , {expiresIn :'7D'})
+        const token = jwt.sign({userid :userexists._id}, process.env.JWT as string , {expiresIn :'7d'})
         return Response.json({token,id:userexists._id,email:userexists.email},{status : 200})
         
 
