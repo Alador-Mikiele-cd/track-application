@@ -1,5 +1,6 @@
 'use client'
 
+import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 
@@ -54,6 +55,7 @@ export default function Login() {
             <button onClick={handle} className="bg-black text-white rounded px-4 py-2">
                 Log in
             </button>
+            <Link href={'/signup'}>i do not have account</Link>
         </div>
     )
 }
