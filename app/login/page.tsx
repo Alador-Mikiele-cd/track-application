@@ -24,7 +24,7 @@ export default function Login() {
         }
 
         localStorage.setItem('token', data.token)
-        route.push('/dashbord')
+        route.push('/')
     }
 
     function handle() {

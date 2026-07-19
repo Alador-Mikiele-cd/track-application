@@ -1,6 +1,7 @@
 import connectDb from "@/lib/db";
 import Application from '@/lib/models/application'
 import {requireAuth} from '@/lib/auth'
+import User from '@/lib/models/user'
 export async function GET(req:Request) {
 
     const auth = await requireAuth(req)

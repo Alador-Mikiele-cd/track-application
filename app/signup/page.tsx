@@ -1,28 +1,58 @@
-import bcrypt from 'bcrypt'
-import jwt from 'jsonwebtoken'
-import User from '@/lib/models/user'
-import connectDb from '@/lib/db'
+'use client'
 
-export async function POST(req: Request) {
-    try {
-        await connectDb()
-        const { name, email, password } = await req.json()
+import { useRouter } from "next/navigation"
+import { useState } from "react"
 
-        const exist = await User.findOne({ email })
-        if (exist) {
-            return Response.json({ message: "user already exists" }, { status: 409 })
+export default function Signup() {
+    const [email, setEmail] = useState('')
+    const [pass, setPass] = useState('')
+    const [error, setError] = useState('')
+    const route = useRouter()
+
+    async function getuser() {
+        const res = await fetch('/api/users', {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, password: pass })
+        })
+
+        const data = await res.json()
+
+        if (!res.ok) {
+            setError(data.message || data.err || 'Something went wrong')
+            return
         }
 
-        const hashedpassword = await bcrypt.hash(password, 10)
-        const user = await User.create({ name, email, password: hashedpassword })
-
-        const token = jwt.sign({ userid: user._id }, process.env.JWT as string, { expiresIn: '7d' })
-
-        return Response.json(
-            { token, userId: user._id, email: user.email },
-            { status: 201 }
-        )
-    } catch (err: any) {
-        return Response.json({ err: err.message }, { status: 500 })
+        route.push('/login')
     }
+
+    function handle() {
+        getuser()
+    }
+
+    return (
+        <div className="max-w-sm mx-auto p-6 flex flex-col gap-3">
+            <h1 className="text-2xl font-semibold mb-2">Sign up</h1>
+
+            {error && <p className="text-red-600 text-sm">{error}</p>}
+
+            <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Email"
+                className="border-2 rounded px-3 py-2"
+            />
+            <input
+                type="password"
+                value={pass}
+                onChange={(e) => setPass(e.target.value)}
+                placeholder="Password"
+                className="border-2 rounded px-3 py-2"
+            />
+            <button onClick={handle} className="bg-black text-white rounded px-4 py-2">
+                Sign up
+            </button>
+        </div>
+    )
 }

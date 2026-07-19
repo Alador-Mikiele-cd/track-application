@@ -1,7 +1,7 @@
 import connectDb from "@/lib/db"
 import { requireAuth } from '@/lib/auth'
 import Application from "@/lib/models/application"
-
+import User from "@/lib/models/user"
 export async function PATCH(req: Request, { params }: { params: { id: string } }) {
     const auth = await requireAuth(req)
     if (!auth.ok) {
