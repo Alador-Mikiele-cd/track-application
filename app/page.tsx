@@ -89,7 +89,14 @@ export default function Dashboard() {
         }
         getApplications()
     }, [])
-
+useEffect(() => {
+    const token = getToken()
+    if (!token) {
+        router.push('/login')
+        return
+    }
+    getApplications()
+}, [])
     const statusOptions = ['Applied', 'Interview', 'Offer', 'Rejected']
 
     return (
